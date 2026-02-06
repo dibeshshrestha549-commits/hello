@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine 💖</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: radial-gradient(circle at top, #ff9ec4, #ff4f81, #ff1e56);
+    animation: bgPulse 6s infinite alternate;
+}
+
+@keyframes bgPulse{
+    0%{filter:brightness(1);}
+    100%{filter:brightness(1.2);}
+}
+
+.card{
+    position:relative;
+    width:90%;
+    max-width:380px;
+    padding:25px;
+    border-radius:25px;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(20px);
+    box-shadow:0 0 40px rgba(255,255,255,0.4);
+    text-align:center;
+    color:white;
+    animation:fadeIn 1.5s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+.image-container{
+    width:200px;
+    height:200px;
+    margin:0 auto 15px;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 0 20px rgba(255,255,255,0.6);
+    transition:0.5s;
+}
+
+.image-container img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+h1{
+    font-size:22px;
+    margin-bottom:15px;
+}
+
+button{
+    padding:10px 22px;
+    margin:8px;
+    font-size:16px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    transition:0.3s ease;
+}
+
+#yesBtn{
+    background:white;
+    color:#ff1e56;
+    font-weight:bold;
+}
+
+#noBtn{
+    background:transparent;
+    border:2px solid white;
+    color:white;
+}
+
+.message{
+    margin-top:15px;
+    min-height:40px;
+    font-size:15px;
+}
+
+/* Floating Hearts */
+.heart{
+    position:absolute;
+    bottom:-20px;
+    font-size:18px;
+    animation:floatUp linear infinite;
+    opacity:0.8;
+}
+
+@keyframes floatUp{
+    0%{transform:translateY(0);opacity:0;}
+    50%{opacity:1;}
+    100%{transform:translateY(-110vh);opacity:0;}
+}
+
+.love-overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(255,0,100,0.9);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+    color:white;
+    font-size:22px;
+    padding:20px;
+    opacity:0;
+    pointer-events:none;
+    transition:1s;
+    border-radius:25px;
+}
+
+.love-overlay.active{
+    opacity:1;
+    pointer-events:auto;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="image-container">
+        <img id="mainImage" src="pic.jpg" alt="Romantic">
+    </div>
+
+    <h1 id="question">Will you be my Valentine? 💘</h1>
+
+    <button id="yesBtn">Yes </button>
+    <button id="noBtn">No </button>
+
+    <div class="message" id="message"></div>
+
+    <div class="love-overlay" id="overlay">
+        <p>😭💖 I knew itttt baby!</p>
+        <p>You just made my heart the happiest in this universe ✨</p>
+        <p>I love you sooo much 💞 Forever us 💍</p>
+    </div>
+
+</div>
+
+<!-- Audio placeholders -->
+<audio id="yesAudio" src="yesSong.mp3" preload="auto"></audio>
+<audio id="noAudio" src="noSong.mp3" preload="auto"></audio>
+
+<script>
+let noCount=0;
+let yesBtn=document.getElementById("yesBtn");
+let noBtn=document.getElementById("noBtn");
+let message=document.getElementById("message");
+let overlay=document.getElementById("overlay");
+let image=document.getElementById("mainImage");
+
+let yesAudio=document.getElementById("yesAudio");
+let noAudio=document.getElementById("noAudio");
+
+const noMessages=[
+"Are you sure? 🥺",
+"Think again... 💭",
+"Really sure? 😭",
+"My heart is fragile 💔",
+"Please don't do this 😩",
+"I'll give you all my love 💞",
+"You are my favorite person 🥹",
+"Say yes pleaseee 💖",
+"Don't break my heart 😭",
+"Last chance baby 😔"
+];
+
+noBtn.addEventListener("click",function(){
+    noAudio.play(); // Play NO sound
+    if(noCount<10){
+        message.innerText=noMessages[noCount];
+        noCount++;
+
+        let size=parseFloat(window.getComputedStyle(yesBtn).fontSize);
+        yesBtn.style.fontSize=(size+4)+"px";
+        yesBtn.style.padding=(10+noCount*2)+"px "+(22+noCount*4)+"px";
+    }else{
+        noBtn.style.display="none";
+        message.innerText="plzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz babeeeeeeeeeeeeeeeee 💖";
+    }
+});
+
+yesBtn.addEventListener("click",function(){
+    yesAudio.play(); // Play YES sound
+    overlay.classList.add("active");
+    noBtn.style.display="none";
+    yesBtn.style.display="none";
+
+    image.src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde";
+});
+
+/* Floating Hearts */
+function createHeart(){
+    const heart=document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerText="💖";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.animationDuration=(5+Math.random()*5)+"s";
+    document.body.appendChild(heart);
+
+    setTimeout(()=>heart.remove(),10000);
+}
+setInterval(createHeart,400);
+
+</script>
+
+</body>
+</html>
